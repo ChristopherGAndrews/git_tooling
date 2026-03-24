@@ -6,8 +6,14 @@
 # codespell commit message
 printf "Spell check the commit message in file ${1}:\n $(cat $1) \n"
 codespell --ignore-words=ignore-spelling-words.txt $1 || CMD_STATUS=$?
-echo "Status ${CMD_STATUS:-0}"
-if [ ${CMD_STATUS:-0} != 0 ]; then
+
+if [ ${CMD_STATUS:-0} = 127 ]; then
+    echo "Error: codespell command not found, install codespell according the the instructions for your OS."
+    exit 1
+elif [ ${CMD_STATUS:-0} != 0 ]; then
     echo "Error: Commit message failed spellcheck with a status of: ${CMD_STATUS}"
+    echo ""
+    echo "Fix the spelling errors in ${1} or update ignore-spelling-words.txt and then retry your commit again:"
+    echo "git commit -F ${1}"
     exit 1
 fi
