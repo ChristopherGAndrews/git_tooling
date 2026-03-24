@@ -8,7 +8,7 @@
 
 printf "Spell check the commit message:\n $(cat $1) \n"
 codespell --ignore-words=ignore-spelling-words.txt $1
-if [ $? -ne 0 ]; then
+if [ $? != 0 ]; then
     exit 1
 fi
 
