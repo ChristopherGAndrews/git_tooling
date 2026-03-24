@@ -10,7 +10,7 @@ codespell --ignore-words=ignore-spelling-words.txt $1
 CMD_STATUS=$?
 echo "Status ${CMD_STATUS}"
 if [ ${CMD_STATUS} != 0 ]; then
-    printf "\033[0;31mError: Commit message failed spellcheck with a status of:\033[0m ${CMD_STATUS}\n"
+    echo "Error: Commit message failed spellcheck with a status of: ${CMD_STATUS}"
     exit 1
 fi
 
