@@ -10,7 +10,7 @@ codespell --ignore-words=ignore-spelling-words.txt $1
 CMD_STATUS=$?
 echo "Status ${CMD_STATUS}"
 if [ ${CMD_STATUS} != 0 ]; then
-    printf "\033[0;31mError: Commit message failed spellcheck with a status of:\033[0m\n ${CMD_STATUS}"
+    printf "\033[0;31mError: Commit message failed spellcheck with a status of:\033[0m ${CMD_STATUS}\n"
     exit 1
 fi
 
@@ -40,7 +40,6 @@ ces across our products can glue commits together with issues.
 #
 # and… if the script isn’t running, double check your settings for core.hooksPath interfering:
 # git config --show-origin core.hooksPath
-
 
 # many thanks to contributions from
 # @foo @Erwin Vrolijk @Joshua Jacobson @Brett Taylor @Jonathan Doklovic
