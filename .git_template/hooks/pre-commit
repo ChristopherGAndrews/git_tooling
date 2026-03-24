@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # Block commits to main branch
+# Based on: https://dev.to/cerico/blocking-commits-on-main-with-the-pre-commit-hook-36l1
 branch="$(git branch --show-current)"
 
 if [ "$branch" = "main" ]; then
