@@ -3,6 +3,12 @@
 # git prepare-commit-msg hook for automatically prepending an issue key
 # from the start of the current branch name to commit messages.
 
+# codespell commit message
+
+echo ${1} | codespell --ignore-words=ignore-spelling-words.txt -
+if [ $? -eq 0 ]; then
+    exit 1
+fi
 
 # From: https://github.com/atlassian/atlascode/blob/main/scripts/prepare-commit-jira.sh
 # License: https://github.com/atlassian/atlascode/blob/main/LICENSE
