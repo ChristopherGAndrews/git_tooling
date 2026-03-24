@@ -1,15 +1,15 @@
-#!/bin/sh
+#!/bin/bash
 #
 # git prepare-commit-msg hook for automatically prepending an issue key
 # from the start of the current branch name to commit messages.
 
 # codespell commit message
 
+
 printf "Spell check the commit message:\n $(cat $1) \n"
-codespell --ignore-words=ignore-spelling-words.txt $1
-CMD_STATUS=$?
-echo "Status ${CMD_STATUS}"
-if [ ${CMD_STATUS} != 0 ]; then
+codespell --ignore-words=ignore-spelling-words.txt $1 || CMD_STATUS=$?
+echo "Status ${CMD_STATUS:-0}"
+if [ ${CMD_STATUS:-0} != 0 ]; then
     echo "Error: Commit message failed spellcheck with a status of: ${CMD_STATUS}"
     exit 1
 fi
