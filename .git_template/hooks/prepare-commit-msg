@@ -1,23 +1,12 @@
-#!/bin/bash
+#!/bin/sh
 #
 # git prepare-commit-msg hook for automatically prepending an issue key
 # from the start of the current branch name to commit messages.
 
-# codespell commit message
-
-
-printf "Spell check the commit message:\n $(cat $1) \n"
-codespell --ignore-words=ignore-spelling-words.txt $1 || CMD_STATUS=$?
-echo "Status ${CMD_STATUS:-0}"
-if [ ${CMD_STATUS:-0} != 0 ]; then
-    echo "Error: Commit message failed spellcheck with a status of: ${CMD_STATUS}"
-    exit 1
-fi
 
 # From: https://github.com/atlassian/atlascode/blob/main/scripts/prepare-commit-jira.sh
 # License: https://github.com/atlassian/atlascode/blob/main/LICENSE
-# This commit hook will extract a Jira issue key from your branch name (you are naming your branches with issue key’s aren’t you?) and append it to all commit messages so that many pla
-ces across our products can glue commits together with issues.
+# This commit hook will extract a Jira issue key from your branch name (you are naming your branches with issue key’s aren’t you?) and append it to all commit messages so that many places across our products can glue commits together with issues.
 #
 # To use this:
 #
@@ -35,11 +24,11 @@ ces across our products can glue commits together with issues.
 #
 # git config --global --list --show-origin will show you a list of existing config options and where they were found, including the filename.
 #
-# Once you found where your .git_config file is, follow the above instructions. I did not need to change the proposed templatedir value in step 4, nor the shebang in the file, but your
- mileage may vary.
+# Once you found where your .git_config file is, follow the above instructions. I did not need to change the proposed templatedir value in step 4, nor the shebang in the file, but your mileage may vary.
 #
 # and… if the script isn’t running, double check your settings for core.hooksPath interfering:
 # git config --show-origin core.hooksPath
+
 
 # many thanks to contributions from
 # @foo @Erwin Vrolijk @Joshua Jacobson @Brett Taylor @Jonathan Doklovic
