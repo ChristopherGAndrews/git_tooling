@@ -3,7 +3,6 @@
 # git prepare-commit-msg hook for automatically prepending an issue key
 # from the start of the current branch name to commit messages.
 
-
 # From: https://github.com/atlassian/atlascode/blob/main/scripts/prepare-commit-jira.sh
 # License: https://github.com/atlassian/atlascode/blob/main/LICENSE
 # This commit hook will extract a Jira issue key from your branch name (you are naming your branches with issue key’s aren’t you?) and append it to all commit messages so that many places across our products can glue commits together with issues.
@@ -48,7 +47,6 @@ FIXUP_COMMIT=`grep -o "fixup\!" $1`
 if [ $? -eq 0 ]; then
     exit
 fi
-
 
 # issue key matched from branch prefix, prepend to commit message
 sed -i -e "1s/^/$ISSUE_KEY /" $1

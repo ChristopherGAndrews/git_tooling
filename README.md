@@ -63,16 +63,17 @@ mkdir -p ~/.git_template/hooks
 * [prepare-commit-msg](./.git_template/hooks/prepare-commit-msg)
   * Add the Jira work item id to the commit message
 
-Copy the files to you template folder
+Copy the files to you template folder:
 
 ```
-cp ./.git_template/hooks/* ~/.git_template/hooks/
+cp -i ./.git_template/hooks/* ~/.git_template/hooks/
 chmod +x ~/.git_template/hooks/*
 ```
 
 Or create the files and modify them with only the code your want
 
 ```
+touch ~/.git_template/hooks/commit-msg
 touch ~/.git_template/hooks/pre-commit
 touch ~/.git_template/hooks/prepare-commit-msg
 chmod +x ~/.git_template/hooks/*
