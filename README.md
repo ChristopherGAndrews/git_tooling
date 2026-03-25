@@ -2,13 +2,13 @@
 
 Git related scripts and configurations. Assumptions:
 
-* You are using Linux with bash
+* You are using Linux with bash. These configurations might work on Macs.
 
 # Setup to contribute to this repo
 
 * This repo uses [pre-commit](https://pre-commit.com/) to ensure constancy. Please install.
 
-# Prompt modification
+# Modification to add git repo and branch to the prompt
 
 To get this:
 
@@ -19,9 +19,7 @@ username@hostname ~/git/ansible ansible (JIRA-123 branch name)
 $
 ```
 
-
 Add the following to your `~/.bashrc` file
-
 
 ```
 # From https://gist.github.com/joseluisq/1e96c54fa4e1e5647940
@@ -44,6 +42,12 @@ Git templates make sure all new cloned repos share certain configuration setting
 ```
 mkdir -p ~/.git_template
 git config --global init.templateDir ~/.git_template
+```
+
+You can update existing repos with:
+
+```
+git init
 ```
 
 # Git hooks

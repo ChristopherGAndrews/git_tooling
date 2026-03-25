@@ -3,7 +3,8 @@
 # git prepare-commit-msg hook for automatically prepending an issue key
 # from the start of the current branch name to commit messages.
 
-# codespell commit message
+# codespell commit message, note this only finds common misspellings, it is not a substitute for proofreading your commit messages for clarity and quality. It is meant to catch common typos that can make commit messages look unprofessional or be harder to understand. You can add words to ignore-spelling-words.txt if there are project specific terms or names that codespell flags as misspelled but you want to allow in commit messages.
+#  https://github.com/codespell-project/codespell
 printf "Spell check the commit message in file ${1}:\n $(cat $1) \n"
 codespell --ignore-words=ignore-spelling-words.txt $1 || CMD_STATUS=$?
 
