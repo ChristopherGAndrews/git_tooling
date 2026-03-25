@@ -1,0 +1,28 @@
+# The Terraform pre-commit hooks will require you to have all the required authentication configured.
+#
+# https://pre-commit.com
+#
+# Install executable: pip install pre-commit
+# Install into local repo: pre-commit install
+#
+# Run pre-commit hooks: pre-commit run --all-files
+
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v5.0.0
+  hooks:
+    - id: trailing-whitespace
+    - id: no-commit-to-branch
+
+- repo: https://github.com/gitleaks/gitleaks
+  rev: v8.27.2
+  hooks:
+    - id: gitleaks-docker
+
+- repo: https://github.com/codespell-project/codespell
+  rev: v2.2.6
+  hooks:
+    - id: codespell
+      args:
+         - "--ignore-words"
+         - "ignore-spelling-words.txt"
