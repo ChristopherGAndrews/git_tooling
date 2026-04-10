@@ -50,6 +50,20 @@ do
   esac
 done
 
+GIT_CLONE=TRUE
+
+# Check to see if you are currently in a git repository then print the current repo origin and ssh singing key
+if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+    CURRENT_REPO_ORIGIN=$(git config --get remote.origin.url)
+    CURRENT_REPO_SIGNING_KEY=$(git config --get user.signingkey)
+    GIT_CLONE=FALSE
+
+    echo "You are currently in a git repository with origin: ${CURRENT_REPO_ORIGIN}"
+    echo "The current git signing key is: ${CURRENT_REPO_SIGNING_KEY}"
+else
+    echo "You are not currently in a git repository"
+fi
+
 echo -------------------------------------------
 # scan the ssh config file for github hosts and get the identity file for each
 SSH_CONFIG_HOSTS=$(grep -iE "host\s+.*github.com" ~/.ssh/config | awk '{print $2}')
@@ -81,20 +95,34 @@ printf "The identity file for ${SSH_HOST_PATH} is ${SSH_IDENTITY_FILE}\n"
 
 echo -------------------------------------------
 
-# if the repo is not set, ask for it
-if [ -z "${GITHUB_REPO:-}" ]; then
-# ask what github repo to clonegit@github.com:BC-Collab/aws-ses.git
-read -p "Enter the github repo to clone via ssh (e.g., git@github.com:<org>/<repo>.git): " GITHUB_REPO
+if [ "${GIT_CLONE}" = "TRUE" ]; then
+
+    # if the repo is not set, ask for it
+    if [ -z "${GITHUB_REPO:-}" ]; then
+    # ask what github repo to clonegit@github.com:BC-Collab/aws-ses.git
+    read -p "Enter the github repo to clone via ssh (e.g., git@github.com:<org>/<repo>.git): " GITHUB_REPO
+    fi
+
+    # change the ssh url to use the ssh host path instead of github.com
+    GITHUB_REPO_SSH=$(echo ${GITHUB_REPO} | sed "s/github.com/${SSH_HOST_PATH}/g" | tr -d '[:space:]')
+    echo "Cloning ${GITHUB_REPO_SSH} using ${SSH_HOST_PATH} for authentication"
+    git clone "${GITHUB_REPO_SSH}"
+
+    GIT_DIR=$(basename "${GITHUB_REPO}" .git)
+    cd "${GIT_DIR}"
+else
+    echo "Altering the origin from ${CURRENT_REPO_ORIGIN}"
+    # change the origin url to use the ssh host path instead of github.com
+    echo ${CURRENT_REPO_ORIGIN}  sed "s/git@[^:]*:/git@${SSH_HOST_PATH}:/"  tr -d '[:space:]'
+    GITHUB_REPO_SSH=$(echo ${CURRENT_REPO_ORIGIN} | sed "s/git@.*:/git@${SSH_HOST_PATH}:/" | tr -d '[:space:]')
+    echo "Changing the origin to ${GITHUB_REPO_SSH}"
+    git remote set-url origin "${GITHUB_REPO_SSH}"
+
+    echo get the root git folder using the git command
+    GIT_DIR=$(git rev-parse --show-toplevel)
 fi
 
-# change the ssh url to use the ssh host path instead of github.com
-GITHUB_REPO_SSH=$(echo ${GITHUB_REPO} | sed "s/github.com/${SSH_HOST_PATH}/g" | tr -d '[:space:]')
-echo "Cloning ${GITHUB_REPO_SSH} using ${SSH_HOST_PATH} for authentication"
-git clone "${GITHUB_REPO_SSH}"
-
 # set the signing key for the repo to the identity file
-GIT_DIR=$(basename "${GITHUB_REPO}" .git)
-cd "${GIT_DIR}"
 SIGNING_KEY_VALUE=$(cat ${SSH_IDENTITY_FILE})
 git config --local user.signingkey "${SIGNING_KEY_VALUE}"
 
@@ -108,7 +136,7 @@ if [[ "${SIGNING_KEY_VALUE}" == *"#"* ]]; then
 fi
 
 echo -------------------------------------------
-echo "Set the signing key for ${GIT_DIR} to the identity file ${SSH_IDENTITY_FILE}"
+echo "Set the signing ssh key to the file ${SSH_IDENTITY_FILE}"
 
 # print public key for the identity file
 echo -------------------------------------------
